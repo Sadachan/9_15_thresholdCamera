@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"> <!--IEなら最新で表示-->
+  <title>目で聴く</title>
+</head>
+<style>
+  .noclick{
+    pointer-events:none;
+    user-select:none;
+  }
+  .doneTask{
+    text-decoration:line-through;
+  }
+</style>
+<html>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="todoList in todoLists">
+          <input type="checkbox" v-model="todoList.checkToggle">
+          <label v-bind:class={doneTask:todoList.checkToggle}>{{todoList.title}}</label>
+        </li>
+      </ul>
+      <hr>
+      <input tyoe="text" placeholder="新しいタスクを追加する"
+        v-model="newTitle" v-on:change="checkEnteredValue()">
+      <button v-on:click="addToDoList()"
+        v-bind:class={noclick:!newTitleToggle}>タスクを追加
+      </button>
+      <br>
+      <button v-on:click="deleteToDoList()">タスクを削除する</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    let app=new Vue({
+      el:'#app',
+      data:{
+        todoLists:[
+          {title:"会議資料を作成する",checkToggle:false},
+          {title:"取引先にメールを返信する",checkToggle:false},
+          {title:"見積書を作成する",checkToggle:false}
+        ],
+        newTitleToggle:false,
+        newTitle:'',
+      },
+      methods:{
+        checkEnteredValue(){
+          if(this.newTitle!=""){
+            this.newTitleToggle=true
+          }else{
+            this.newTitleToggle=false
+          }
+        },
+        addToDoList(){
+          this.todoLists.push({
+            title:this.newTitle,
+            checkToggle:false
+          })
+          this.newTitleToggle=false
+          this.newTitle=''
+        },
+        deleteToDoList(){
+          this.todoLists=this.todoLists.filter(function(list){
+            return list.checkToggle===false
+          })
+        }
+      }
+    })
+    </script>
+  </body>
+</html>
